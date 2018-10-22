@@ -90,10 +90,11 @@ gapminder %>% mutate(planet = "Earth") ## adds planet column
 gapminder %>% mutate(gdp = pop * gdpPercap) ## new column of gdp
 
 ## challenge
-both <- gapminder %>% 
-  filter(country %in% c("Egypt", "Vietnam")) 
-gdp_both <- both$gdpPercap
-max(gdp_both)
+gapminder %>% 
+  filter(country %in% c("Egypt", "Vietnam")) %>% 
+  mutate(gdp = pop*gdpPercap) %>% 
+  mutate(max_gdp =max(gdp))
+
 
 
 ```
