@@ -9,6 +9,15 @@ output: html_document
 
 Day 1 Software Carpentry workshop learning ggpot2
 ```{r}
+
+##instal packages
+###install.packages('tidyverse')
+
+##loading package 
+###library(tidyverse)
+
+
+
 #National Parks in California
 ca <- read_csv("https://raw.githubusercontent.com/OHI-Science/data-science-training/master/data/ca.csv") 
 
@@ -24,5 +33,109 @@ visit_16 <- read_csv("https://raw.githubusercontent.com/OHI-Science/data-science
 #All Nationally designated sites in Massachusetts
 mass <- read_csv("https://raw.githubusercontent.com/OHI-Science/data-science-training/master/data/mass.csv")
 
+```
+
+Data --> park visitation rates
+
+Start with California ('ca') dataset
+```{r}
+head(ca)
+```
+
+## Plotting visitation to all CA national parks over time
+```{r}
+ggplot(data = ca) +
+  geom_point(aes(x = year, y = visitors))
+```
+
+## Plotting, adding park name color cord
+```{r}
+ggplot(data = ca) +
+  geom_point(aes(x = year, y = visitors, color = park_name))
+```
+
+## Plotting, adding park name color cord
+```{r}
+ggplot(data = ca) +
+  geom_point(aes(x = year, y = visitors, color = park_name)) +
+  labs(x = "Year",
+       y = "Visitation",
+       title = "California National Park Visitation")
+
+```
+
+
+## plotting se data 
+
+```{r}
+#head(se)
+ggplot(data = se) +
+  geom_point(aes(x = year, y = visitors, color = state)) +
+  labs(x = "Year", 
+       y = "Visitation",
+       title = "Southeast National Park Visitation") +
+  theme_minimal() +
+  theme(legend.title = element_blank(),
+        axis.text.x = element_text(angle =45, size = 14))
+```
+
+## Faceting plots
+```{r}
+ggplot(data = se) +
+  geom_point(aes(x = year, y = visitors, color = park_name)) +
+  facet_wrap(~ state, scales = "free_y") +
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+# geoms
+```{r}
+ggplot(data = se) +
+  geom_jitter(aes(x = park_name, y = visitors, color = year), alpha = 0.4, width = 0.4) +
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+
+## line geom
+```{r}
+ggplot(se) +
+  geom_line(aes(x = year, y = visitors, color = park_name)) +
+  theme_bw()
+```
+
+
+## multiple geoms on one plot
+```{r}
+ggplot(data = acadia) +
+  geom_point(aes(x = year, y = visitors))+
+  geom_line(aes(x = year, y = visitors))
+```
+## removing redundancy in aboev code
+```{r}
+ggplot(data = acadia, aes(x = year, y = visitors)) +
+  geom_point() +
+  geom_line()
+```
+
+
+#installl more themes
+```{r}
+#install.packages('ggthemes')
+#library(ggthemes)
+```
+
+## bar charts
+```{r}
+ggplot(data = visit_16, aes(x = state, y = visitors, fill = park_name)) +
+  geom_bar(stat = "identity") +
+  theme_bw()
+```
+
+## save a ggplot
+```{r}
+myplot <- ggplot(data = visit_16, aes(x = state, y = visitors, fill = park_name)) +
+  geom_bar(stat = "identity") +
+  theme_bw()
+
+ggsave(filename = "myplot.png", myplot)
 ```
 
