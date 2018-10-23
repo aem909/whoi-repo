@@ -99,4 +99,40 @@ gapminder %>%
 
 ```
 
+# new day 102318
+```{r}
+library(tidyverse) # reloading tidyberse 
+
+# reload gapminder dataset
+gapminder <- readr::read_csv('https://raw.githubusercontent.com/OHI-Science/data-science-training/master/data/gapminder.csv')
+
+```
+
+## group_by(group)
+```{r}
+## with mutate
+gap_grouped <- gapminder %>% 
+  group_by(country) %>% 
+  mutate(gdp = pop * gdpPercap, 
+         max_gdp = max(gdp)) %>% 
+  ungroup() ## makes new column with max per country, but is a bit redundant
+
+## now, use summarize()
+gap_summarized <- gapminder %>% 
+  group_by(country) %>% 
+  mutate(gdp = pop*gdpPercap) %>% 
+  summarize(max_gdp = max(gdp)) %>% 
+  ungroup()
+
+```
+
+## arrange()
+```{r}
+gap_summarized <- gapminder %>% 
+  group_by(country) %>% 
+  mutate(gdp = pop*gdpPercap) %>% 
+  summarize(max_gdp = max(gdp)) %>% 
+  ungroup() %>% 
+  arrange(max_gdp) ## automatically arranges in low to high
+```
 
