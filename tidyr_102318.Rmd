@@ -20,8 +20,68 @@ gap_long <- gap_wide %>%
          value = obs_values,
          -continent, -country) %>% 
   separate(col = obstype_year,
-           into = c("obc_type", "year"), 
+           into = c("obs_type", "year"), 
            sep = "_",
            convert = TRUE)
+```
+
+## plotting long data
+```{r}
+canada_df <- gap_long %>% 
+  filter(country == "Canada",
+         obs_type == "lifeExp")
+
+# plotting
+ggplot(data = canada_df, aes(x = year, y = obs_values)) + 
+  geom_line() +
+  theme_bw()
+
+# plotting life expextancy of all countries in the Americas
+life_df <- gap_long %>% 
+  filter(obs_type == "lifeExp",
+         continent == "Americas")
+ggplot(data = life_df, aes(x = year, y = obs_values, color = country)) +
+  geom_line()
+
+```
+
+## exercise
+
+```{r}
+## plotting mean life expectancy per continent from 
+
+mean_life <- gap_long %>% 
+  filter(obs_type == "lifeExp",
+         year >= 1982,
+         year <= 2007) %>% 
+  group_by(continent, year) %>% 
+  summarise(mean_le = mean(obs_values)) %>% 
+  ungroup()
+
+## plot
+ggplot(data = mean_life,
+       aes(x = year, y = mean_le, color = continent)) +
+  geom_line() +
+  labs(x = "Year",
+       y = "Age(years)", 
+       title = "Mean Life Expetancy") +
+  theme_bw()
+
+```
+
+## spread()
+```{r}
+## turning long dataset into wide dataset
+
+gap_normal <- gap_long %>% 
+  spread(key = obs_type,
+         value = obs_values)
+
+new_gap_wide <-  gap_long %>% 
+  unite(obstype_year, obs_type, year) %>% 
+  spread(key = obstype_year,
+         value = obs_values)
+ 
+
 ```
 
